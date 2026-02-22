@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Room By You</title>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+  <header class="container">
+    <h1>ROOM BY YOU</h1>
+    <p class="sub">Собери параметры — получи дизайн-план и список мебели.</p>
+  </header>
+
+  <main class="container">
+    <section class="card">
+      <h2>Параметры комнаты</h2>
+
+      <div class="grid">
+        <label>
+          Тип комнаты
+          <select id="roomType">
+            <option>Спальня</option>
+            <option>Гостиная</option>
+            <option>Кухня</option>
+            <option>Детская</option>
+            <option>Кабинет</option>
+            <option>Другое</option>
+          </select>
+        </label>
+
+        <label>
+          Размеры (м²)
+          <input id="size" type="number" min="1" placeholder="например 14"/>
+        </label>
+
+        <label>
+          Стиль
+          <select id="style">
+            <option>Сканди</option>
+            <option>Минимализм</option>
+            <option>Современный</option>
+            <option>Лофт</option>
+            <option>Классика</option>
+            <option value="custom">Свой текст</option>
+          </select>
+        </label>
+
+        <label id="customStyleWrap" class="hidden">
+          Свой стиль (текст)
+          <input id="customStyle" type="text" placeholder="например: warm cozy japandi"/>
+        </label>
+
+        <label>
+          Бюджет ($)
+          <input id="budget" type="number" min="0" placeholder="например 600"/>
+        </label>
+
+        <label>
+          Страна
+          <select id="country">
+            <option>Georgia</option>
+            <option>USA</option>
+            <option>UK</option>
+            <option>Germany</option>
+            <option>France</option>
+            <option>Other</option>
+          </select>
+        </label>
+
+        <label>
+          Возраст (главного пользователя)
+          <input id="age" type="number" min="0" placeholder="например 28"/>
+        </label>
+
+        <label class="full">
+          Доп. пожелания
+          <textarea id="wishes" rows="3" placeholder="например: много хранения, без ковров, кошка"></textarea>
+        </label>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Кто живёт в комнате</h2>
+
+      <div class="grid">
+        <label>
+          Количество людей
+          <select id="peopleCount">
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="3plus">3+</option>
+          </select>
+        </label>
+
+        <label>
+          Категория
+          <select id="category">
+            <option value="kids">kids</option>
+            <option value="notKids">not kids</option>
+            <option value="mixed">mixed</option>
+          </select>
+        </label>
+
+        <label id="case1Wrap">
+          Если 1 человек
+          <select id="case1">
+            <option>boy</option>
+            <option>girl</option>
+            <option>neutral</option>
+          </select>
+        </label>
+
+        <label id="case2Wrap" class="hidden">
+          Если 2 человека
+          <select id="case2">
+            <option>husband & wife</option>
+            <option>boy & boy</option>
+            <option>girl & girl</option>
+            <option>boy & girl (siblings)</option>
+            <option>neutral shared</option>
+          </select>
+        </label>
+
+        <label id="case3Wrap" class="hidden full">
+          Если 3 человека (коротко опиши)
+          <input id="case3" type="text" placeholder="например: mom + dad + kid 7y"/>
+        </label>
+
+        <label id="case3plusWrap" class="hidden full">
+          Если 3+ человека (свободное поле)
+          <input id="case3plus" type="text" placeholder="например: wife + husband + 2 kids"/>
+        </label>
+      </div>
+
+      <button id="generateBtn" class="btn">Generate</button>
+      <p class="hint">Пока это MVP: выдаёт план + список мебели. Картинки и оплата — позже.</p>
+    </section>
+
+    <section id="result" class="card hidden">
+      <h2>Результат</h2>
+
+      <div class="images">
+        <div class="imgPh">Image 1</div>
+        <div class="imgPh">Image 2</div>
+        <div class="imgPh">Image 3</div>
+      </div>
+
+      <h3>Дизайн-план</h3>
+      <div id="plan" class="box"></div>
+
+      <h3>Список мебели</h3>
+      <ul id="furniture"></ul>
+
+      <h3>Где купить (пока базово)</h3>
+      <ul id="shops"></ul>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
