@@ -152,7 +152,15 @@ async function generateDesigns() {
     });
 
     if (!res.ok) {
-      throw new Error(`Request failed: ${res.status}`);
+      let message = `Request failed: ${res.status}`;
+      try {
+        const errorJson = await res.json();
+        if (errorJson?.error) {
+          message = errorJson.error;
+        }
+      } catch (_ignored) {
+      }
+      throw new Error(message);
     }
 
     const json = await res.json();
@@ -166,7 +174,7 @@ async function generateDesigns() {
     renderDesignOptions(lastGeneratedDesigns);
   } catch (err) {
     console.error(err);
-    statusText.textContent = "Could not generate designs. Check API setup and try again.";
+    statusText.textContent = `Could not generate designs: ${err.message}`;
   } finally {
     setLoadingState(false);
   }
