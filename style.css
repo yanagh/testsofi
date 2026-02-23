@@ -121,6 +121,11 @@ input:focus, select:focus, textarea:focus {
   filter: brightness(1.08);
 }
 
+.btn-disabled {
+  opacity: 0.7;
+  cursor: wait;
+}
+
 .hint {
   margin: 10px 0 0;
   opacity: 0.85;
@@ -161,12 +166,72 @@ a {
   color: var(--pink-font);
 }
 
+.design-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 12px;
+  margin-top: 10px;
+}
+
+.design-option {
+  border: 2px solid rgba(16, 42, 103, 0.25);
+  background: rgba(255, 255, 255, 0.7);
+  border-radius: 12px;
+  padding: 10px;
+}
+
+.design-option.selected {
+  border-color: #ff2fb2;
+  box-shadow: 0 0 0 2px rgba(255, 47, 178, 0.25);
+}
+
+.design-image {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  border-radius: 10px;
+  border: 2px solid rgba(255, 255, 255, 0.8);
+  margin-bottom: 8px;
+}
+
+.design-title {
+  margin: 6px 0;
+  color: var(--pink-font);
+}
+
+.design-summary {
+  font-size: 14px;
+  min-height: 64px;
+}
+
+.pick-btn {
+  width: 100%;
+  margin-top: 8px;
+  font-size: 15px;
+  padding: 10px;
+}
+
+.selected-image-wrap {
+  margin-top: 12px;
+}
+
+.selected-image {
+  width: 100%;
+  max-width: 420px;
+  border-radius: 12px;
+  border: 2px solid rgba(255, 255, 255, 0.85);
+}
+
 @media (max-width: 720px) {
   .grid {
     grid-template-columns: 1fr;
   }
 
   .images {
+    grid-template-columns: 1fr;
+  }
+
+  .design-grid {
     grid-template-columns: 1fr;
   }
 }
