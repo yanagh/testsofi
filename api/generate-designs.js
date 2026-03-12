@@ -52,13 +52,16 @@ function createDesignBlueprints(input) {
       summary: `${input.styleText} ${input.roomType} concept with ${variant.angle}. Built for ${input.livingSetup}.`,
       budgetRange: `$${low} - $${high}`,
       prompt: [
-        `Photorealistic interior design render, ${input.roomType}.`,
+        `Photorealistic interior design render of a complete ${input.roomType}.`,
         `Style: ${input.styleText}.`,
         `Room size: ${input.size} square meters.`,
         `User profile: ${input.livingSetup}.`,
         `Preferences: ${input.wishes || "none"}.`,
         `Creative direction: ${variant.angle}.`,
-        "Ultra-detailed, realistic materials, no text, no watermark, no people."
+        "Show the full room, not a cropped corner.",
+        "Use a wide-angle interior camera view that captures most of the space from wall to wall.",
+        "Show floor, ceiling, main furniture layout, circulation paths, and overall room composition.",
+        "Architectural interior photography, ultra-detailed, realistic materials, balanced perspective, no text, no watermark, no people."
       ].join(" "),
       furniture: makeFakeFurniture(input.roomType, input.styleText, variant.id)
     };
