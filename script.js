@@ -14,9 +14,13 @@ const resultSection = el("result");
 const selectedSection = el("selectedResult");
 const statusText = el("statusText");
 const designOptions = el("designOptions");
+const localMatchStatus = el("localMatchStatus");
+const localMatchCard = el("localMatchCard");
 
 let lastGeneratedDesigns = [];
+let lastGenerationInput = null;
 let selectedDesignId = null;
+let localMatchRequestToken = 0;
 
 function updateStyleUI() {
   const isCustom = styleSelect.value === "custom";
@@ -70,6 +74,89 @@ function setLoadingState(isLoading) {
   generateBtn.classList.toggle("btn-disabled", isLoading);
 }
 
+function resetLocalMatch() {
+  localMatchStatus.textContent = "Searching JYSK Georgia for a similar item...";
+  localMatchCard.classList.add("hidden");
+  el("localMatchImage").removeAttribute("src");
+  el("localMatchStore").textContent = "";
+  el("localMatchLink").textContent = "";
+  el("localMatchLink").removeAttribute("href");
+  el("localMatchPrice").textContent = "";
+  el("localMatchRationale").textContent = "";
+}
+
+function renderLocalMatch(match) {
+  if (!match) {
+    localMatchCard.classList.add("hidden");
+    return;
+  }
+
+  localMatchStatus.textContent = "";
+  el("localMatchImage").src = match.imageUrl || "";
+  el("localMatchStore").textContent = match.store || "JYSK Georgia";
+  el("localMatchLink").textContent = match.productName;
+  el("localMatchLink").href = match.productUrl;
+  el("localMatchPrice").textContent = match.price ? `Price: ${match.price}` : "Price: not listed";
+  el("localMatchRationale").textContent = match.rationale || "";
+  localMatchCard.classList.remove("hidden");
+}
+
+async function loadLocalMatch(design) {
+  const requestToken = ++localMatchRequestToken;
+
+  resetLocalMatch();
+
+  if (!lastGenerationInput || lastGenerationInput.country !== "Georgia") {
+    localMatchStatus.textContent = "Local shop matching is available for Georgia only in v1.";
+    return;
+  }
+
+  try {
+    const res = await fetch("/api/find-local-item", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        designId: design.id,
+        title: design.title,
+        summary: design.summary,
+        imageUrl: design.imageUrl,
+        roomType: lastGenerationInput.roomType,
+        styleText: lastGenerationInput.styleText,
+        country: lastGenerationInput.country
+      })
+    });
+
+    if (requestToken !== localMatchRequestToken) {
+      return;
+    }
+
+    let payload = null;
+    try {
+      payload = await res.json();
+    } catch (_ignored) {
+    }
+
+    if (!res.ok) {
+      throw new Error(payload?.error || `Request failed: ${res.status}`);
+    }
+
+    if (!payload?.match) {
+      localMatchStatus.textContent = payload?.reason || "No similar item found on JYSK Georgia yet.";
+      localMatchCard.classList.add("hidden");
+      return;
+    }
+
+    renderLocalMatch(payload.match);
+  } catch (error) {
+    if (requestToken !== localMatchRequestToken) {
+      return;
+    }
+
+    localMatchStatus.textContent = error.message || "No similar item found on JYSK Georgia yet.";
+    localMatchCard.classList.add("hidden");
+  }
+}
+
 function renderSelectedDesign(design) {
   selectedDesignId = design.id;
   el("selectedTitle").textContent = `${design.title} (${design.budgetRange})`;
@@ -77,6 +164,7 @@ function renderSelectedDesign(design) {
 
   const selectedImage = el("selectedImage");
   selectedImage.src = design.imageUrl;
+  selectedImage.alt = `${design.title} selected room design`;
 
   const selectedFurniture = el("selectedFurniture");
   selectedFurniture.innerHTML = "";
@@ -93,6 +181,7 @@ function renderSelectedDesign(design) {
   });
 
   selectedSection.classList.remove("hidden");
+  loadLocalMatch(design);
 }
 
 function renderDesignOptions(designs) {
@@ -169,7 +258,9 @@ async function generateDesigns() {
     }
 
     lastGeneratedDesigns = json.designs;
+    lastGenerationInput = payload;
     selectedDesignId = null;
+    localMatchRequestToken += 1;
     statusText.textContent = "Done. Pick the design you like best.";
     renderDesignOptions(lastGeneratedDesigns);
   } catch (err) {

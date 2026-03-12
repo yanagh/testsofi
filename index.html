@@ -154,12 +154,28 @@
       <h2>Selected Design</h2>
       <h3 id="selectedTitle"></h3>
       <div id="selectedSummary" class="box"></div>
+      <div class="selected-layout">
+        <div id="selectedImageWrap" class="selected-image-wrap">
+          <img id="selectedImage" class="selected-image" alt="Selected room design"/>
+        </div>
 
-      <h3>Furniture List With Links (fake links for now)</h3>
-      <ul id="selectedFurniture"></ul>
-      <div id="selectedImageWrap" class="selected-image-wrap">
-        <img id="selectedImage" class="selected-image" alt="Selected room design"/>
+        <section class="local-match-panel">
+          <h3>Local Shop Match</h3>
+          <p id="localMatchStatus" class="hint">Choose a design to search JYSK Georgia.</p>
+          <article id="localMatchCard" class="local-match-card hidden">
+            <img id="localMatchImage" class="local-match-image" alt="Matched product"/>
+            <div class="local-match-copy">
+              <p id="localMatchStore" class="local-match-store"></p>
+              <a id="localMatchLink" class="local-match-link" target="_blank" rel="noreferrer"></a>
+              <p id="localMatchPrice" class="local-match-price"></p>
+              <p id="localMatchRationale" class="local-match-rationale"></p>
+            </div>
+          </article>
+        </section>
       </div>
+
+      <h3>Generated Furniture List (placeholder links)</h3>
+      <ul id="selectedFurniture"></ul>
     </section>
   </main>
 
